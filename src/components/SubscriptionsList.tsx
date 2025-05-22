@@ -7,7 +7,9 @@ import {
   Grid,
   Alert,
   Box,
+  Link,
 } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
 import { getSubscriptions } from '../services/api';
 import type { Subscription, ApiErrorResponse } from '../types/api';
 
@@ -51,6 +53,14 @@ export const SubscriptionsList = () => {
         Доступные абонементы
       </Typography>
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+      
+      <Alert severity="info" sx={{ mb: 3 }}>
+        Информация о ваших активных абонементах доступна в{' '}
+        <Link component={RouterLink} to="/profile">
+          профиле пользователя
+        </Link>
+      </Alert>
+
       <Grid container spacing={3}>
         {subscriptions.map((subscription) => (
           <Grid item xs={12} sm={6} md={3} key={subscription.id}>

@@ -119,4 +119,19 @@ export interface Group {
 
 export interface GroupsResponse {
   groups: Group[];
+}
+
+export interface UserSubscription {
+  user_id: number;
+  full_name: string;
+  sub_id: number;
+  sub_name: string;
+  visits_per_week: number;
+  price: number;
+  date_start: string;
+  date_end: string;
+}
+
+export interface UserSubscriptionsResponse {
+  user_subscriptions: UserSubscription[];
 } 
