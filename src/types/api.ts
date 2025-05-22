@@ -46,4 +46,13 @@ export interface PoolsResponse {
 
 export interface TrainersResponse {
   trainers: User[];
+}
+
+export interface PoolTrainers {
+  pool: Pool;
+  trainers: User[];
+}
+
+export interface PoolTrainersResponse {
+  trainers_for_pools: PoolTrainers[];
 } 

@@ -5,6 +5,7 @@ import { RegisterForm } from './components/RegisterForm';
 import { LoginForm } from './components/LoginForm';
 import { PoolsList } from './components/PoolsList';
 import { TrainersList } from './components/TrainersList';
+import { PoolTrainersList } from './components/PoolTrainersList';
 import { Navigation } from './components/Navigation';
 
 const theme = createTheme({
@@ -83,6 +84,16 @@ function App() {
               element={
                 isAuthenticated ? (
                   <TrainersList />
+                ) : (
+                  <Navigate to="/login" replace />
+                )
+              }
+            />
+            <Route
+              path="/pool-trainers"
+              element={
+                isAuthenticated ? (
+                  <PoolTrainersList />
                 ) : (
                   <Navigate to="/login" replace />
                 )

@@ -31,6 +31,13 @@ export const Navigation = ({ isAuthenticated, onLogout }: NavigationProps) => {
             </Button>
             <Button
               color="inherit"
+              component={RouterLink}
+              to="/pool-trainers"
+            >
+              Тренеры по бассейнам
+            </Button>
+            <Button
+              color="inherit"
               onClick={onLogout}
             >
               Выйти
