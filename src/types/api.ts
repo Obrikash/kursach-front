@@ -55,4 +55,16 @@ export interface PoolTrainers {
 
 export interface PoolTrainersResponse {
   trainers_for_pools: PoolTrainers[];
+}
+
+export interface TrainerProfit {
+  id: number;
+  full_name: string;
+  pool_id: number;
+  pool_name: string;
+  profit: number;
+}
+
+export interface TrainerProfitsResponse {
+  profits: TrainerProfit[];
 } 

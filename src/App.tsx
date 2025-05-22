@@ -6,7 +6,11 @@ import { LoginForm } from './components/LoginForm';
 import { PoolsList } from './components/PoolsList';
 import { TrainersList } from './components/TrainersList';
 import { PoolTrainersList } from './components/PoolTrainersList';
+import { UserProfile } from './components/UserProfile';
+import { TrainerProfits } from './components/TrainerProfits';
 import { Navigation } from './components/Navigation';
+import { getUserProfile } from './services/api';
+import type { User } from './types/api';
 
 const theme = createTheme({
   palette: {
@@ -21,21 +25,40 @@ const theme = createTheme({
 });
 
 function App() {
-  const [isLogin, setIsLogin] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
+  const [userRole, setUserRole] = useState<number | undefined>();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    setIsAuthenticated(!!token);
+    if (token) {
+      setIsAuthenticated(true);
+      // Fetch user profile to get role
+      getUserProfile()
+        .then(response => {
+          setUserRole(response.user.role_id);
+        })
+        .catch(() => {
+          // If token is invalid, clear it
+          localStorage.removeItem('token');
+          setIsAuthenticated(false);
+        });
+    }
   }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     setIsAuthenticated(false);
+    setUserRole(undefined);
   };
 
   const handleLoginSuccess = () => {
     setIsAuthenticated(true);
+    // Fetch user profile to get role
+    getUserProfile()
+      .then(response => {
+        setUserRole(response.user.role_id);
+      });
   };
 
   const handleRegisterSuccess = () => {
@@ -46,7 +69,11 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router>
-        <Navigation isAuthenticated={isAuthenticated} onLogout={handleLogout} />
+        <Navigation 
+          isAuthenticated={isAuthenticated} 
+          onLogout={handleLogout}
+          userRole={userRole}
+        />
         <Container component="main" sx={{ mt: 4 }}>
           <Routes>
             <Route
@@ -96,6 +123,26 @@ function App() {
                   <PoolTrainersList />
                 ) : (
                   <Navigate to="/login" replace />
+                )
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                isAuthenticated ? (
+                  <UserProfile />
+                ) : (
+                  <Navigate to="/login" replace />
+                )
+              }
+            />
+            <Route
+              path="/statistics"
+              element={
+                isAuthenticated && userRole === 3 ? (
+                  <TrainerProfits />
+                ) : (
+                  <Navigate to="/pools" replace />
                 )
               }
             />

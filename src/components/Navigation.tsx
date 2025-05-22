@@ -4,9 +4,10 @@ import { Link as RouterLink } from 'react-router-dom';
 interface NavigationProps {
   isAuthenticated: boolean;
   onLogout: () => void;
+  userRole?: number;
 }
 
-export const Navigation = ({ isAuthenticated, onLogout }: NavigationProps) => {
+export const Navigation = ({ isAuthenticated, onLogout, userRole }: NavigationProps) => {
   return (
     <AppBar position="static">
       <Toolbar>
@@ -35,6 +36,22 @@ export const Navigation = ({ isAuthenticated, onLogout }: NavigationProps) => {
               to="/pool-trainers"
             >
               Тренеры по бассейнам
+            </Button>
+            {userRole === 3 && (
+              <Button
+                color="inherit"
+                component={RouterLink}
+                to="/statistics"
+              >
+                Статистика
+              </Button>
+            )}
+            <Button
+              color="inherit"
+              component={RouterLink}
+              to="/profile"
+            >
+              Профиль
             </Button>
             <Button
               color="inherit"
