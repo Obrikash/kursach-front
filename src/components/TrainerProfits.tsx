@@ -13,20 +13,26 @@ import {
   TableHead,
   TableRow,
   Paper,
+  Grid,
 } from '@mui/material';
-import { getTrainerProfits } from '../services/api';
-import type { TrainerProfit, ApiErrorResponse } from '../types/api';
+import { getTrainerProfits, getPoolProfit } from '../services/api';
+import type { TrainerProfit, ApiErrorResponse, PoolProfit } from '../types/api';
 
 export const TrainerProfits = () => {
   const [profits, setProfits] = useState<TrainerProfit[]>([]);
+  const [poolProfit, setPoolProfit] = useState<PoolProfit | null>(null);
   const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchProfits = async () => {
+    const fetchData = async () => {
       try {
-        const response = await getTrainerProfits();
-        setProfits(response.profits);
+        const [profitsResponse, poolProfitResponse] = await Promise.all([
+          getTrainerProfits(),
+          getPoolProfit()
+        ]);
+        setProfits(profitsResponse.profits);
+        setPoolProfit(poolProfitResponse.pool);
         setError('');
       } catch (err) {
         const error = err as ApiErrorResponse;
@@ -40,7 +46,7 @@ export const TrainerProfits = () => {
       }
     };
 
-    fetchProfits();
+    fetchData();
   }, []);
 
   if (loading) {
@@ -56,16 +62,43 @@ export const TrainerProfits = () => {
   return (
     <Container>
       <Typography variant="h5" component="h2" gutterBottom>
-        Статистика прибыли тренеров
+        Статистика прибыли
       </Typography>
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-      <Card sx={{ mb: 3 }}>
-        <CardContent>
-          <Typography variant="h6" gutterBottom>
-            Общая прибыль: {totalProfit.toLocaleString('ru-RU')} ₽
-          </Typography>
-        </CardContent>
-      </Card>
+      <Grid container spacing={3} sx={{ mb: 3 }}>
+        <Grid item xs={12} md={6}>
+          <Card>
+            <CardContent>
+              <Typography variant="h6" gutterBottom>
+                Общая прибыль: {totalProfit.toLocaleString('ru-RU')} ₽
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+        {poolProfit && (
+          <Grid item xs={12} md={6}>
+            <Card>
+              <CardContent>
+                <Typography variant="h6" gutterBottom>
+                  Самый прибыльный бассейн
+                </Typography>
+                <Typography variant="subtitle1" gutterBottom>
+                  {poolProfit.pool.name}
+                </Typography>
+                <Typography color="textSecondary" gutterBottom>
+                  {poolProfit.pool.address} • {poolProfit.pool.type}
+                </Typography>
+                <Typography variant="h6" color="primary">
+                  {poolProfit.profit.toLocaleString('ru-RU')} ₽
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        )}
+      </Grid>
+      <Typography variant="h6" gutterBottom>
+        Прибыль по тренерам
+      </Typography>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>

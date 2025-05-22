@@ -67,4 +67,22 @@ export interface TrainerProfit {
 
 export interface TrainerProfitsResponse {
   profits: TrainerProfit[];
+}
+
+export interface PoolProfit {
+  pool: Pool;
+  profit: number;
+}
+
+export interface PoolProfitResponse {
+  pool: PoolProfit;
+}
+
+export interface AttachTrainerRequest {
+  user_id: number;
+  pool_id: number;
+}
+
+export interface AttachTrainerResponse {
+  success: string;
 } 

@@ -8,6 +8,7 @@ import { TrainersList } from './components/TrainersList';
 import { PoolTrainersList } from './components/PoolTrainersList';
 import { UserProfile } from './components/UserProfile';
 import { TrainerProfits } from './components/TrainerProfits';
+import { AttachTrainer } from './components/AttachTrainer';
 import { Navigation } from './components/Navigation';
 import { getUserProfile } from './services/api';
 import type { User } from './types/api';
@@ -141,6 +142,16 @@ function App() {
               element={
                 isAuthenticated && userRole === 3 ? (
                   <TrainerProfits />
+                ) : (
+                  <Navigate to="/pools" replace />
+                )
+              }
+            />
+            <Route
+              path="/attach-trainer"
+              element={
+                isAuthenticated && userRole === 3 ? (
+                  <AttachTrainer />
                 ) : (
                   <Navigate to="/pools" replace />
                 )

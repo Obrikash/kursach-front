@@ -38,13 +38,22 @@ export const Navigation = ({ isAuthenticated, onLogout, userRole }: NavigationPr
               Тренеры по бассейнам
             </Button>
             {userRole === 3 && (
-              <Button
-                color="inherit"
-                component={RouterLink}
-                to="/statistics"
-              >
-                Статистика
-              </Button>
+              <>
+                <Button
+                  color="inherit"
+                  component={RouterLink}
+                  to="/statistics"
+                >
+                  Статистика
+                </Button>
+                <Button
+                  color="inherit"
+                  component={RouterLink}
+                  to="/attach-trainer"
+                >
+                  Прикрепить тренера
+                </Button>
+              </>
             )}
             <Button
               color="inherit"
