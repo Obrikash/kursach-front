@@ -10,6 +10,7 @@ import { UserProfile } from './components/UserProfile';
 import { TrainerProfits } from './components/TrainerProfits';
 import { AttachTrainer } from './components/AttachTrainer';
 import { SubscriptionsList } from './components/SubscriptionsList';
+import { GroupManagement } from './components/GroupManagement';
 import { Navigation } from './components/Navigation';
 import { getUserProfile } from './services/api';
 import type { User } from './types/api';
@@ -163,6 +164,16 @@ function App() {
               element={
                 isAuthenticated && userRole === 3 ? (
                   <AttachTrainer />
+                ) : (
+                  <Navigate to="/pools" replace />
+                )
+              }
+            />
+            <Route
+              path="/groups"
+              element={
+                isAuthenticated && userRole === 3 ? (
+                  <GroupManagement />
                 ) : (
                   <Navigate to="/pools" replace />
                 )

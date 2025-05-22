@@ -96,4 +96,27 @@ export interface Subscription {
 
 export interface SubscriptionsResponse {
   subscriptions: Subscription[];
+}
+
+export interface CreateGroupRequest {
+  pool_id: number;
+  category_id: number;
+  trainer_id: number;
+}
+
+export interface CreateGroupResponse {
+  success: string;
+}
+
+export interface Group {
+  id: number;
+  category: string;
+  pool_name: string;
+  trainer_name: string;
+  user_id: number;
+  image: string;
+}
+
+export interface GroupsResponse {
+  groups: Group[];
 } 

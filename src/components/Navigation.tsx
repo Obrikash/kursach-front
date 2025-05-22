@@ -60,6 +60,13 @@ export const Navigation = ({ isAuthenticated, onLogout, userRole }: NavigationPr
                 >
                   Прикрепить тренера
                 </Button>
+                <Button
+                  color="inherit"
+                  component={RouterLink}
+                  to="/groups"
+                >
+                  Управление группами
+                </Button>
               </>
             )}
             <Button

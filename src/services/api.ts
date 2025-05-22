@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { RegisterRequest, UserResponse, ApiErrorResponse, LoginRequest, LoginResponse, PoolsResponse, TrainersResponse, PoolTrainersResponse, TrainerProfitsResponse, PoolProfitResponse, AttachTrainerRequest, AttachTrainerResponse, SubscriptionsResponse } from '../types/api';
+import type { RegisterRequest, UserResponse, ApiErrorResponse, LoginRequest, LoginResponse, PoolsResponse, TrainersResponse, PoolTrainersResponse, TrainerProfitsResponse, PoolProfitResponse, AttachTrainerRequest, AttachTrainerResponse, SubscriptionsResponse, CreateGroupRequest, CreateGroupResponse, GroupsResponse } from '../types/api';
 
 const API_URL = 'http://localhost:4000/v1';
 
@@ -130,6 +130,30 @@ export const attachTrainerToPool = async (data: AttachTrainerRequest): Promise<A
 export const getSubscriptions = async (): Promise<SubscriptionsResponse> => {
   try {
     const response = await api.get<SubscriptionsResponse>('/subscriptions');
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response?.data) {
+      throw error.response.data as ApiErrorResponse;
+    }
+    throw error;
+  }
+};
+
+export const createGroup = async (data: CreateGroupRequest): Promise<CreateGroupResponse> => {
+  try {
+    const response = await api.post<CreateGroupResponse>('/groups', data);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response?.data) {
+      throw error.response.data as ApiErrorResponse;
+    }
+    throw error;
+  }
+};
+
+export const getGroups = async (): Promise<GroupsResponse> => {
+  try {
+    const response = await api.get<GroupsResponse>('/groups');
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response?.data) {
