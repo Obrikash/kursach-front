@@ -9,6 +9,7 @@ import { PoolTrainersList } from './components/PoolTrainersList';
 import { UserProfile } from './components/UserProfile';
 import { TrainerProfits } from './components/TrainerProfits';
 import { AttachTrainer } from './components/AttachTrainer';
+import { SubscriptionsList } from './components/SubscriptionsList';
 import { Navigation } from './components/Navigation';
 import { getUserProfile } from './services/api';
 import type { User } from './types/api';
@@ -122,6 +123,16 @@ function App() {
               element={
                 isAuthenticated ? (
                   <PoolTrainersList />
+                ) : (
+                  <Navigate to="/login" replace />
+                )
+              }
+            />
+            <Route
+              path="/subscriptions"
+              element={
+                isAuthenticated ? (
+                  <SubscriptionsList />
                 ) : (
                   <Navigate to="/login" replace />
                 )

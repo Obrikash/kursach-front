@@ -85,4 +85,15 @@ export interface AttachTrainerRequest {
 
 export interface AttachTrainerResponse {
   success: string;
+}
+
+export interface Subscription {
+  id: number;
+  name: string;
+  visits_per_week: number;
+  price: number;
+}
+
+export interface SubscriptionsResponse {
+  subscriptions: Subscription[];
 } 

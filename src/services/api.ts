@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { RegisterRequest, UserResponse, ApiErrorResponse, LoginRequest, LoginResponse, PoolsResponse, TrainersResponse, PoolTrainersResponse, TrainerProfitsResponse, PoolProfitResponse, AttachTrainerRequest, AttachTrainerResponse } from '../types/api';
+import type { RegisterRequest, UserResponse, ApiErrorResponse, LoginRequest, LoginResponse, PoolsResponse, TrainersResponse, PoolTrainersResponse, TrainerProfitsResponse, PoolProfitResponse, AttachTrainerRequest, AttachTrainerResponse, SubscriptionsResponse } from '../types/api';
 
 const API_URL = 'http://localhost:4000/v1';
 
@@ -118,6 +118,18 @@ export const getPoolProfit = async (): Promise<PoolProfitResponse> => {
 export const attachTrainerToPool = async (data: AttachTrainerRequest): Promise<AttachTrainerResponse> => {
   try {
     const response = await api.post<AttachTrainerResponse>('/pools/trainers', data);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response?.data) {
+      throw error.response.data as ApiErrorResponse;
+    }
+    throw error;
+  }
+};
+
+export const getSubscriptions = async (): Promise<SubscriptionsResponse> => {
+  try {
+    const response = await api.get<SubscriptionsResponse>('/subscriptions');
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response?.data) {

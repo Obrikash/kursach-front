@@ -37,6 +37,13 @@ export const Navigation = ({ isAuthenticated, onLogout, userRole }: NavigationPr
             >
               Тренеры по бассейнам
             </Button>
+            <Button
+              color="inherit"
+              component={RouterLink}
+              to="/subscriptions"
+            >
+              Абонементы
+            </Button>
             {userRole === 3 && (
               <>
                 <Button
