@@ -31,4 +31,15 @@ export interface LoginRequest {
 
 export interface LoginResponse {
   authentication_token: string;
+}
+
+export interface Pool {
+  id: number;
+  name: string;
+  address: string;
+  type: string;
+}
+
+export interface PoolsResponse {
+  pools: Pool[];
 } 

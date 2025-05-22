@@ -10,7 +10,11 @@ import {
 import { loginUser } from '../services/api';
 import type { ApiErrorResponse } from '../types/api';
 
-export const LoginForm = () => {
+interface LoginFormProps {
+  onLoginSuccess: () => void;
+}
+
+export const LoginForm = ({ onLoginSuccess }: LoginFormProps) => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -26,6 +30,15 @@ export const LoginForm = () => {
     }));
   };
 
+  const translateError = (errorMessage: string): string => {
+    const errorTranslations: { [key: string]: string } = {
+      'invalid credentials': 'Неверный email или пароль',
+      'must be at 8 bytes long': 'Пароль должен содержать минимум 8 символов',
+      'you must be authenticated to access this resource': 'Необходима авторизация для доступа к ресурсу',
+    };
+    return errorTranslations[errorMessage] || errorMessage;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -33,19 +46,20 @@ export const LoginForm = () => {
 
     try {
       const response = await loginUser(formData);
-      setSuccess('Login successful!');
-      // Store the token in localStorage
+      setSuccess('Вход выполнен успешно!');
       localStorage.setItem('token', response.authentication_token);
       setFormData({
         email: '',
         password: '',
       });
+      onLoginSuccess();
     } catch (err) {
       const error = err as ApiErrorResponse;
       if (error.error) {
-        setError(typeof error.error === 'string' ? error.error : Object.values(error.error)[0]);
+        const errorMessage = typeof error.error === 'string' ? error.error : Object.values(error.error)[0];
+        setError(translateError(errorMessage));
       } else {
-        setError('An error occurred during login');
+        setError('Произошла ошибка при входе');
       }
     }
   };
@@ -61,7 +75,7 @@ export const LoginForm = () => {
         }}
       >
         <Typography component="h1" variant="h5">
-          Sign in
+          Вход в систему
         </Typography>
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
           {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
@@ -72,7 +86,7 @@ export const LoginForm = () => {
             required
             fullWidth
             id="email"
-            label="Email Address"
+            label="Email"
             name="email"
             autoComplete="email"
             autoFocus
@@ -84,7 +98,7 @@ export const LoginForm = () => {
             required
             fullWidth
             name="password"
-            label="Password"
+            label="Пароль"
             type="password"
             id="password"
             autoComplete="current-password"
@@ -97,7 +111,7 @@ export const LoginForm = () => {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            Sign In
+            Войти
           </Button>
         </Box>
       </Box>
