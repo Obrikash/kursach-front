@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
-import { CssBaseline, ThemeProvider, createTheme, Box, Button, Typography } from '@mui/material';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Container, CssBaseline, ThemeProvider, createTheme, Box, Button, Typography } from '@mui/material';
 import { RegisterForm } from './components/RegisterForm';
 import { LoginForm } from './components/LoginForm';
 import { PoolsList } from './components/PoolsList';
+import { TrainersList } from './components/TrainersList';
+import { Navigation } from './components/Navigation';
 
 const theme = createTheme({
   palette: {
@@ -38,46 +41,57 @@ function App() {
     setIsLogin(true);
   };
 
-  if (isAuthenticated) {
-    return (
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Box sx={{ p: 2 }}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-            <Typography variant="h4" component="h1">
-              Система управления бассейнами
-            </Typography>
-            <Button variant="outlined" onClick={handleLogout}>
-              Выйти
-            </Button>
-          </Box>
-          <PoolsList />
-        </Box>
-      </ThemeProvider>
-    );
-  }
-
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Box sx={{ p: 2 }}>
-        <Typography variant="h4" component="h1" align="center" gutterBottom>
-          Система управления бассейнами
-        </Typography>
-        {isLogin ? (
-          <LoginForm onLoginSuccess={handleLoginSuccess} />
-        ) : (
-          <RegisterForm onRegisterSuccess={handleRegisterSuccess} />
-        )}
-        <Box sx={{ mt: 2, textAlign: 'center' }}>
-          <Button
-            variant="text"
-            onClick={() => setIsLogin(!isLogin)}
-          >
-            {isLogin ? "Нет аккаунта? Зарегистрироваться" : "Уже есть аккаунт? Войти"}
-          </Button>
-        </Box>
-      </Box>
+      <Router>
+        <Navigation isAuthenticated={isAuthenticated} onLogout={handleLogout} />
+        <Container component="main" sx={{ mt: 4 }}>
+          <Routes>
+            <Route
+              path="/login"
+              element={
+                !isAuthenticated ? (
+                  <LoginForm onLoginSuccess={handleLoginSuccess} />
+                ) : (
+                  <Navigate to="/pools" replace />
+                )
+              }
+            />
+            <Route
+              path="/register"
+              element={
+                !isAuthenticated ? (
+                  <RegisterForm onRegisterSuccess={handleRegisterSuccess} />
+                ) : (
+                  <Navigate to="/pools" replace />
+                )
+              }
+            />
+            <Route
+              path="/pools"
+              element={
+                isAuthenticated ? (
+                  <PoolsList />
+                ) : (
+                  <Navigate to="/login" replace />
+                )
+              }
+            />
+            <Route
+              path="/trainers"
+              element={
+                isAuthenticated ? (
+                  <TrainersList />
+                ) : (
+                  <Navigate to="/login" replace />
+                )
+              }
+            />
+            <Route path="/" element={<Navigate to="/pools" replace />} />
+          </Routes>
+        </Container>
+      </Router>
     </ThemeProvider>
   );
 }
