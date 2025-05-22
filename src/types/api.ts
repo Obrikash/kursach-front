@@ -22,4 +22,13 @@ export interface ApiErrorResponse {
   error: {
     [key: string]: string;
   };
+}
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface LoginResponse {
+  authentication_token: string;
 } 
